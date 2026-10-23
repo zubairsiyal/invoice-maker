@@ -1,0 +1,233 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Invoice Maker</title>
+<!-- Lemon Squeezy Overlay Script -->
+<script src="https://assets.lemonsqueezy.com/lemon.js" defer></script>
+<style>
+:root{--bg:#f4f5fb;--cd:#fff;--tx:#0f172a;--mu:#64748b;--bd:#e5e7f0;--ac:#5b5bf0;--ac2:#8b5cf6;--ok:#0f9d6b;--bad:#e8590c;--sh:0 1px 2px rgba(15,23,42,.05),0 8px 24px rgba(15,23,42,.06);--st:max(env(safe-area-inset-top,0px),var(--safe-area-inset-top,0px));--sb:max(env(safe-area-inset-bottom,0px),var(--safe-area-inset-bottom,0px))}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b1020;--cd:#151b2e;--tx:#eef1f8;--mu:#94a3b8;--bd:#242c44;--ac:#8b8cff;--ac2:#a78bfa;--ok:#4ade9f;--bad:#ff9a62;--sh:0 1px 2px rgba(0,0,0,.4)}}
+:root[data-theme="dark"]{--bg:#0b1020;--cd:#151b2e;--tx:#eef1f8;--mu:#94a3b8;--bd:#242c44;--ac:#8b8cff;--ac2:#a78bfa;--ok:#4ade9f;--bad:#ff9a62;--sh:0 1px 2px rgba(0,0,0,.4)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0}
+body{background:var(--bg);color:var(--tx);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-variant-numeric:tabular-nums}
+#app{max-width:640px;margin:0 auto;padding:0 16px 150px;min-height:100vh}
+.top{position:sticky;top:0;z-index:4;display:flex;align-items:center;gap:10px;padding:calc(12px + var(--st)) 0 10px;background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(10px)}
+.top h1{flex:1;font-size:24px;font-weight:800;letter-spacing:-.02em;margin:0}.tr{display:flex;gap:8px}
+.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.pg{animation:f .22s ease-out}@keyframes f{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.card{background:var(--cd);border:1px solid var(--bd);border-radius:20px;padding:16px;margin:0 0 14px;box-shadow:var(--sh)}
+.sl{font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--mu);margin:20px 4px 8px}
+label{display:block;margin:12px 0 5px;font-size:12px;font-weight:600;color:var(--mu)}.card>label:first-child,.r label{margin-top:0}
+input,select,textarea,button{font:inherit;color:var(--tx);background:var(--bg);border:1.5px solid var(--bd);border-radius:14px;padding:13px 14px;max-width:100%;outline:0;transition:border .15s,box-shadow .15s,transform .1s}
+input,select,textarea{width:100%}textarea{min-height:84px;resize:vertical}
+input:focus,select:focus,textarea:focus{border-color:var(--ac);box-shadow:0 0 0 4px color-mix(in srgb,var(--ac) 18%,transparent)}
+button{cursor:pointer;font-weight:650;background:var(--cd);display:inline-flex;align-items:center;justify-content:center;gap:8px}button:active{transform:scale(.97)}
+button.p{background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;border:0;padding:14px 22px;box-shadow:0 8px 20px color-mix(in srgb,var(--ac) 35%,transparent)}
+button.sec{border-color:var(--bd)}button.w{width:100%}button.d{color:var(--bad);border-color:transparent;background:transparent;box-shadow:none}button.sm{padding:6px 10px;font-size:13px}
+button.x{border:0;background:transparent;color:var(--mu);padding:0 6px;font-size:18px}
+.ib{width:42px;height:42px;border-radius:50%;padding:0;box-shadow:var(--sh);flex:none}.ib .tap{font-size:11px;padding:0 8px}.ib:has(.tap){width:auto;border-radius:21px}
+.r{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}.r>*{flex:1 1 90px;min-width:0}.r>button{flex:0 0 auto}
+.mu{color:var(--mu);font-size:13px}.hint{margin:6px 0 0 30px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid var(--bd)}.row:last-child{border:0}
+.chip{display:inline-block;font-size:12px;font-weight:700;padding:3px 10px;border-radius:99px}.chip.ok{color:var(--ok);background:color-mix(in srgb,var(--ok) 14%,transparent)}.chip.bad{color:var(--bad);background:color-mix(in srgb,var(--bad) 14%,transparent)}
+.ck{display:flex!important;gap:10px;align-items:center;margin:4px 0!important;font-size:14px!important;color:var(--tx)!important;font-weight:500!important}.ck input{width:20px;height:20px;padding:0;flex:none;accent-color:var(--ac)}
+.hero{background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;border-radius:24px;padding:20px;margin:6px 0 16px;box-shadow:0 14px 30px color-mix(in srgb,var(--ac) 32%,transparent)}
+.hero span,.hero small{display:block;opacity:.85;font-size:13px}.hero b{display:block;font-size:34px;font-weight:800;letter-spacing:-.02em;line-height:1.25}
+.inv{display:flex;align-items:center;gap:12px;cursor:pointer}.inv .gr{flex:1;min-width:0}.inv .gr b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.inv .amt{text-align:right;font-weight:800;font-size:16px}
+.av{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;font-weight:800;color:var(--ac);background:color-mix(in srgb,var(--ac) 12%,transparent);flex:none}
+.it{border-top:1px solid var(--bd);padding:12px 0 6px;margin-top:6px}.it:first-child{border:0;padding-top:0;margin:0}.am{padding:13px 0;font-weight:800}
+.tot{background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;border-radius:24px;padding:18px 20px;margin:0 0 14px;box-shadow:0 14px 30px color-mix(in srgb,var(--ac) 30%,transparent)}
+.tot .tl,.tot .tl2{font-size:12px;font-weight:700;letter-spacing:.08em;opacity:.85}.tot .big{font-size:36px;font-weight:800;letter-spacing:-.02em;line-height:1.2}
+.tot .rs{border-top:1px solid rgba(255,255,255,.25);margin-top:12px;padding-top:10px}.tr2{display:flex;justify-content:space-between;gap:8px;padding:3px 0;font-size:14px;opacity:.95}.tr2.b{font-weight:800;font-size:16px;opacity:1}
+.empty{display:grid;justify-items:center;gap:8px;text-align:center;padding:36px 12px}.empty .big{width:56px;height:56px;color:var(--ac)}
+.nav{position:fixed;left:0;right:0;bottom:0;z-index:5;display:flex;justify-content:center;gap:clamp(8px,8vw,56px);background:var(--cd);border-top:1px solid var(--bd);padding:8px 0 calc(8px + var(--sb))}
+.nav button{border:0;background:transparent;color:var(--mu);flex-direction:column;gap:2px;font-size:11px;padding:4px 20px;box-shadow:none}.nav button.on{color:var(--ac)}
+.fab{position:fixed;right:max(16px,calc(50% - 304px));bottom:calc(84px + var(--sb));z-index:6;border-radius:99px;padding:14px 20px}
+.act{position:fixed;left:0;right:0;bottom:0;z-index:5;max-width:640px;margin:0 auto;display:flex;gap:10px;padding:12px 16px calc(12px + var(--sb));background:var(--cd);border-top:1px solid var(--bd)}
+.wel{padding-top:calc(40px + var(--st))}.wel h1{font-size:32px;margin:14px 0 6px}.lead{font-size:15px;margin:0 0 18px}.logo{width:64px;height:64px;border-radius:20px;display:grid;place-items:center;color:#fff;background:linear-gradient(135deg,var(--ac),var(--ac2));box-shadow:0 12px 26px color-mix(in srgb,var(--ac) 35%,transparent)}.logo .i{width:30px;height:30px}
+.pbamt{margin-left:auto;color:var(--mu);font-weight:600;transition:color .15s}.pbamt.on{color:var(--ac);font-weight:800}.ck span{flex:1}
+.pb2{padding:5px 14px;border-radius:99px;font-size:13px;margin-top:4px;background:transparent}.pb2.ok{color:var(--ok);border-color:color-mix(in srgb,var(--ok) 55%,transparent)}.pb2.bad{color:var(--bad);border-color:color-mix(in srgb,var(--bad) 55%,transparent)}
+.av.ok{color:#fff;background:var(--ok)}.av .i{width:20px;height:20px;stroke-width:3}.fl{display:flex;gap:8px;margin:0 0 14px}.fl button{padding:7px 16px;border-radius:99px;font-size:13px}.fl button.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+.dl{color:var(--bad);background:transparent;border-color:color-mix(in srgb,var(--bad) 45%,transparent);margin-top:6px}.tot{position:relative}.tot .pd{position:absolute;right:16px;top:14px;background:rgba(255,255,255,.25);padding:2px 12px;border-radius:99px;font-size:12px;font-weight:800;letter-spacing:.06em}
+.lg{cursor:pointer;margin:0!important;padding:13px 16px;border:1.5px solid var(--bd);border-radius:14px;text-align:center;font-size:15px!important;font-weight:650!important;color:var(--tx)!important;background:var(--cd);flex:0 0 auto!important}
+.lrow{display:flex;gap:12px;align-items:flex-end}.lbox{width:76px;height:76px;flex:0 0 auto;margin:0!important;border:1.5px dashed var(--bd);border-radius:18px;display:grid;place-items:center;align-content:center;gap:2px;cursor:pointer;background:var(--bg);color:var(--mu)!important;font-size:11px!important;text-align:center;overflow:hidden;padding:0}.lbox img{width:100%;height:100%;object-fit:contain;background:#fff}
+.toast{position:fixed;left:50%;bottom:calc(100px + var(--sb));transform:translateX(-50%);background:#111827;color:#fff;padding:10px 18px;border-radius:99px;font-weight:600;z-index:9;animation:f .2s}
+</style></head><body><div id="app"></div><script>
+const $=s=>document.querySelector(s),esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])),uid=()=>Math.random().toString(36).slice(2,9);
+const r2=n=>Math.round(Number((n*100).toPrecision(15)))/100;
+const today=()=>{const d=new Date(),p=n=>String(n).padStart(2,'0');return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate())};
+let S={biz:{name:'',addr:'',email:'',phone:'',taxId:'',cur:'USD'},taxes:[],clients:[],invoices:[],seq:1},V={v:'list'};
+try{const j=localStorage.getItem('inv1');if(j)S=Object.assign(S,JSON.parse(j))}catch(e){}
+const save=()=>{try{localStorage.setItem('inv1',JSON.stringify(S))}catch(e){}};
+const applyTheme=()=>{document.documentElement.setAttribute('data-theme',S.theme==='light'||S.theme==='dark'?S.theme:'')};applyTheme();
+const money=n=>{try{return new Intl.NumberFormat(undefined,{style:'currency',currency:S.biz.cur||'USD'}).format(n)}catch(e){return (+n).toFixed(2)}};
+
+/*CALC*/
+function calc(inv,taxes){let sub=0;const tt={},fd=id=>taxes.find(t=>t.id===id)||(inv.snap||[]).find(t=>t.id===id),its=inv.items.map(it=>{const base=r2((+it.q||0)*(+it.p||0)),d=it.dt==='%'?base*(+it.disc||0)/100:(+it.disc||0);return[r2(Math.max(0,base-d)),it.tx]}),
+tot=its.reduce((a,x)=>a+x[0],0),D=inv.dt==='$'?(+inv.disc||0):tot*(+inv.disc||0)/100,k=tot>0?Math.max(0,tot-D)/tot:1;
+for(const [n0,tx] of its){const net=n0*k,rs=(inv.tax||tx||[]).map(fd).filter(Boolean),sum=rs.reduce((a,t)=>a+(+t.rate||0),0),ex=inv.incl?net/(1+sum/100):net;sub+=ex;for(const t of rs)tt[t.name]=(tt[t.name]||0)+ex*(+t.rate||0)/100}
+sub=r2(sub);const lines=Object.entries(tt).map(([n,v])=>[n,r2(v)]),tax=r2(lines.reduce((a,l)=>a+l[1],0)),total=r2(sub+tax),
+wh=inv.wh&&+inv.wh.rate?r2(sub*inv.wh.rate/100):0,pay=r2(total-wh),paid=r2((inv.pays||[]).reduce((a,p)=>a+(+p.amt||0),0));
+return{sub,lines,total,wh,pay,paid,bal:r2(pay-paid),gross:r2(tot),disc:r2(tot-tot*k)}}
+/*END*/
+
+const trows=(c,i)=>[...(c.disc>0?[['Items total',c.gross],['Discount',-c.disc],...(c.lines.length||i.incl?[['Subtotal before tax',c.sub]]:[])]:[['Subtotal',c.sub]]),...c.lines,...(c.wh?[['Withholding ('+((i.wh&&i.wh.name)||'tax')+')',-c.wh]]:[])];
+const cname=id=>(S.clients.find(c=>c.id===id)||{}).name||'No client';
+const plist=inv=>{const k=S.invoices.findIndex(x=>x.id==inv.id);return (k<0?S.invoices:S.invoices.slice(0,k)).filter(x=>inv.cid&&x.cid==inv.cid).map(x=>[x,calc(x,S.taxes).bal]).filter(a=>a[1]>0)};
+const fmtNo=n=>'INV-'+String(n).padStart(4,'0');
+const maxNo=()=>S.invoices.reduce((m,i)=>{const d=String(i.no).match(/(\d+)\s*$/);return d?Math.max(m,+d[1]):m},0);
+const sd=d=>{try{return new Date(d+'T00:00:00').toLocaleDateString(undefined,{day:'numeric',month:'short'})}catch(e){return d}};
+let FL='all';
+const prev=inv=>r2(plist(inv).reduce((a,p)=>a+p[1],0));
+const pAmt=inv=>inv.pbOn?(plist(inv).length?prev(inv):r2(+inv.pbAmt||0)):0;
+const CUR=['USD','EUR','GBP','PKR','INR','AED','SAR','CAD','AUD','NZD','CHF','SEK','NOK','DKK','JPY','CNY','SGD','MYR','ZAR','NGN','KES','EGP','TRY','BRL','MXN'];
+const ic={back:'<path d="M15 5l-7 7 7 7"/>',doc:'<path d="M7 3h8l4 4v14H7z"/><path d="M15 3v4h4M10 12h6M10 16h6"/>',users:'<circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/>',set:'<path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/>',plus:'<path d="M12 5v14M5 12h14"/>',check:'<path d="M5 12l5 5 9-10"/>',sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',moon:'<path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/>',auto:'<circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 010 18z" fill="currentColor"/>',dl:'<path d="M12 3v12M7 10l5 5 5-5M5 21h14"/>',trash:'<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/>'};
+const svg=(d,c)=>`<svg class="${c||'i'}" viewBox="0 0 24 24">${d}</svg>`;
+const hdr=(t,b,r)=>`<div class="top">${b?`<button class="ib" aria-label="Back" onclick="${b}">${svg(ic.back)}</button>`:''}<h1>${t}</h1><div class="tr">${r||''}</div></div>`;
+function toast(m){const e=document.createElement('div');e.className='toast';e.textContent=m;document.body.appendChild(e);setTimeout(()=>e.remove(),1600)}
+function go(v,x){if(v=='edit'&&x&&x.tax===undefined)x.tax=[...new Set(x.items.flatMap(it=>it.tx||[]))];V={v,inv:x};render();window.scrollTo(0,0)}
+function nav(){const t=(v,l,d)=>`<button class="${V.v==v?'on':''}" onclick="go('${v}')">${svg(d)}<span>${l}</span></button>`;return `<nav class="nav">${t('list','Invoices',ic.doc)}${t('cl','Clients',ic.users)}${t('set','Settings',ic.set)}</nav>`}
+function render(){const a=$('#app');if(!S.ob&&!S.biz.name&&!S.invoices.length){a.innerHTML=wel();return}
+a.innerHTML=(V.v=='edit'?edit():V.v=='cl'?clients():V.v=='set'?settings():list())+(V.v=='edit'?'':nav())}
+function wel(){return `<div class="pg wel"><div class="logo">${svg(ic.doc)}</div><h1>Welcome</h1><p class="mu lead">Create professional invoices in seconds. Works offline, and your data stays on this phone.</p><div class="card"><label>Your business name</label><input id="wn" placeholder="e.g. Ali Plumbing"><label>Currency</label><select id="wc">${CUR.map(c=>`<option ${c==S.biz.cur?'selected':''}>${c}</option>`).join('')}</select><label>Do you charge tax on your invoices?</label><select id="wt" onchange="$('#wx').style.display=this.value=='1'?'flex':'none'"><option value="0">No tax (you can add one later)</option><option value="1">Yes, I charge tax</option></select><div class="r" id="wx" style="display:none;margin-top:12px"><div><label>Tax name</label><input id="wtn" placeholder="VAT, GST…"></div><div><label>Rate %</label><input id="wtr" type="number" inputmode="decimal" step="any" placeholder="e.g. 10"></div></div></div><button class="p w" onclick="wgo()">Start</button><div class="mu" style="text-align:center;margin-top:12px">You can change all of this later in Settings.</div></div>`}
+function wgo(){S.biz.name=$('#wn').value.trim();S.biz.cur=$('#wc').value;if($('#wt').value=='1'){const n=$('#wtn').value.trim(),r=+$('#wtr').value;if(n&&r>=0)S.taxes.push({id:uid(),name:n,rate:r,def:true})}S.ob=1;save();go('list')}
+function newInv(){go('edit',{id:uid(),no:fmtNo(S.seq),date:today(),due:'',cid:S.clients.length==1?S.clients[0].id:'',items:[{d:'',q:1,p:0,disc:0,dt:'%',tx:[]}],tax:S.taxes.filter(t=>t.def).map(t=>t.id),disc:0,dt:'%',pbOn:false,pbAmt:0,pays:[],notes:'',isNew:true})}
+function openInv(id){go('edit',JSON.parse(JSON.stringify(S.invoices.find(x=>x.id==id))))}
+function setPaid(id,flag){const i=S.invoices.find(x=>x.id==id);if(!i)return;const c=calc(i,S.taxes);if(flag){if(c.bal>0)(i.pays=i.pays||[]).push({date:today(),amt:c.bal,auto:1})}else{const k=(i.pays||[]).filter(p=>!p.auto);i.pays=calc({...i,pays:k},S.taxes).bal<=0?[]:k}save();render()}
+function setF(f){FL=f;render()}
+function list(){const all=S.invoices.map(i=>[i,calc(i,S.taxes)]),out=r2(all.reduce((a,x)=>a+Math.max(0,x[1].bal),0)),nu=all.filter(x=>x[1].bal>0).length,pdn=all.filter(x=>x[1].pay>0&&x[1].bal<=0).length;
+let h=hdr('Invoices',null,themeBtn())+`<div class="pg"><div class="hero"><span>Outstanding</span><b>${money(out)}</b><small>${nu} unpaid · ${pdn} paid</small></div>`;
+if(!S.invoices.length)h+=`<div class="empty">${svg(ic.doc,'i big')}<b>No invoices yet</b><span class="mu">Create your first invoice in under a minute.</span><button class="p" onclick="newInv()">Create invoice</button></div>`;
+else h+=`<div class="fl">${[['all','All'],['unpaid','Unpaid'],['paid','Paid']].map(f=>`<button class="${FL==f[0]?'on':''}" onclick="setF('${f[0]}')">${f[1]}</button>`).join('')}</div>`;
+let shown=0;for(const [i,c] of [...all].reverse()){const paid=c.pay>0&&c.bal<=0;if(FL=='unpaid'&&paid||FL=='paid'&&!paid)continue;shown++;const n=cname(i.cid);
+h+=`<div class="card inv" onclick="openInv('${i.id}')"><div class="av ${paid?'ok':''}">${paid?svg(ic.check):esc(n.trim().charAt(0).toUpperCase()||'?')}</div><div class="gr"><b>${esc(n)}</b><div class="mu">${esc(i.no)} · ${esc(sd(i.date))} · <span style="color:var(--${paid?'ok':'bad'});font-weight:700">${c.pay<=0?'No items':paid?'Paid':'Unpaid'}</span></div></div><div class="amt">${money(c.pay)}<div>${c.pay>0?`<button class="pb2 ${paid?'bad':'ok'}" onclick="event.stopPropagation();setPaid('${i.id}',${!paid})">${paid?'Unpaid':'Paid'}</button>`:''}</div></div></div>`}
+if(S.invoices.length&&!shown)h+=`<div class="mu" style="text-align:center;margin:24px">Nothing here.</div>`;
+return h+`</div>`+(S.invoices.length?`<button class="p fab" onclick="newInv()">${svg(ic.plus)}New invoice</button>`:'')}
+const item=(it,n)=>`<div class="it"><input placeholder="Description" value="${esc(it.d)}" onchange="V.inv.items[${n}].d=this.value"><div class="r" style="margin-top:8px"><div><label>Qty</label><input type="number" inputmode="decimal" step="any" onfocus="if(+this.value===0)this.value=''" value="${it.q}" onchange="setIt(${n},'q',this.value)"></div><div><label>Price</label><input type="number" inputmode="decimal" step="any" onfocus="if(+this.value===0)this.value=''" value="${it.p}" onchange="setIt(${n},'p',this.value)"></div><div><label>Amount</label><div class="am" id="am${n}">${money(r2((+it.q||0)*(+it.p||0)))}</div></div></div>${V.inv.items.length>1?`<button class="d sm" onclick="rmIt(${n})">Remove item</button>`:''}</div>`;
+const adj=i=>S.taxes.length?`<div class="card"><label>Tax on this invoice</label>${S.taxes.map(t=>`<label class="ck"><input type="checkbox" ${(i.tax||[]).includes(t.id)?'checked':''} onchange="tg('${t.id}')">${esc(t.name)} ${t.rate}%</label>`).join('')}</div>`:'';
+const totHTML=i=>{const c=calc(i,S.taxes),pa=pAmt(i),pl=plist(i),show=c.lines.length||c.disc>0||c.wh,rows=trows(c,i).map(r=>`<div class="tr2"><span>${esc(r[0])}</span><span>${r[1]<0?'−':''}${money(Math.abs(r[1]))}</span></div>`).join('');
+let h=`<div class="tot">${c.pay>0&&c.bal<=0?'<span class="pd">PAID</span>':''}<div class="tl">TOTAL</div><div class="big">${money(c.pay)}</div>${show?`<div class="rs">${rows}</div>`:''}`;
+if(c.paid>0&&c.bal>0)h+=`<div class="rs"><div class="tr2"><span>Paid</span><span>−${money(c.paid)}</span></div><div class="tr2 b"><span>Balance on this invoice</span><span>${money(c.bal)}</span></div></div>`;
+if(i.pbOn&&pa>0)h+=`<div class="rs"><div class="tl2">PREVIOUS BALANCE</div>${pl.length?pl.map(p=>`<div class="tr2"><span>${esc(p[0].no)} · ${esc(p[0].date)}</span><span>${money(p[1])}</span></div>`).join(''):`<div class="tr2"><span>Entered by you</span><span>${money(pa)}</span></div>`}<div class="tr2 b"><span>Total amount due</span><span>${money(r2(pa+c.bal))}</span></div></div>`;
+return h+`</div>`};
+function edit(){const i=V.inv,saved=S.invoices.some(x=>x.id==i.id),pl=plist(i),pb=prev(i);
+let h=hdr(i.isNew?'New invoice':esc(i.no),'back()')+`<div class="pg"><div class="sl" style="margin-top:8px">Details</div><div class="card"><div class="row" style="padding-top:0"><span class="mu">Invoice number</span><b>${esc(i.no)}</b></div><div class="r"><div><label>Date</label><input type="date" value="${i.date}" onchange="V.inv.date=this.value"></div><div><label>Due date</label><input type="date" value="${i.due}" onchange="V.inv.due=this.value"></div></div>
+<label>Client</label><select onchange="V.inv.cid=this.value;render()"><option value="">Choose a client</option>${S.clients.map(x=>`<option value="${x.id}" ${x.id==i.cid?'selected':''}>${esc(x.name)}</option>`).join('')}</select><div class="r" style="margin-top:8px"><input id="qn" placeholder="Or type a new client name"><button class="sec" onclick="qc()">Add client</button></div></div>
+<div class="sl">Items</div><div class="card">${i.items.map(item).join('')}<button class="sec w" style="margin-top:8px" onclick="addItem()">+ Add item</button></div>${adj(i)}
+${pl.length||i.pbOn?`<div class="card"><label class="ck"><input type="checkbox" ${i.pbOn?'checked':''} onchange="V.inv.pbOn=this.checked;render()"><span>Add previous balance</span><b class="pbamt ${i.pbOn?'on':''}">${money(pl.length?pb:pAmt(i))}</b></label></div>`:''}
+<div class="sl">Total</div><div id="tot">${totHTML(i)}</div>
+<div class="sl">Note for your client <span style="text-transform:none;letter-spacing:0">(optional)</span></div><div class="card"><textarea placeholder="e.g. payment details or a thank-you message" onchange="V.inv.notes=this.value">${esc(i.notes)}</textarea></div>
+${saved?`<button class="dl w" onclick="del()">${V.del?'Tap again to delete this invoice':'Delete invoice'}</button>`:''}</div>
+<div class="act"><button class="p" style="flex:1" onclick="sv()">Save invoice</button><button class="sec" onclick="pdf()">${svg(ic.dl)}${isN()?'Share PDF':'PDF'}</button></div>`;return h}
+function refresh(){const i=V.inv;if(!i)return;const t=$('#tot');if(t)t.innerHTML=totHTML(i);i.items.forEach((it,n)=>{const e=$('#am'+n);if(e)e.textContent=money(r2((+it.q||0)*(+it.p||0)))})}
+function setIt(n,k,v){V.inv.items[n][k]=+v||0;refresh()}
+function addItem(){V.inv.items.push({d:'',q:1,p:0,disc:0,dt:'%',tx:[]});render()}
+function rmIt(n){V.inv.items.splice(n,1);render()}
+function tg(id){const a=V.inv.tax=V.inv.tax||[],k=a.indexOf(id);k<0?a.push(id):a.splice(k,1);refresh()}
+function qc(){const n=$('#qn').value.trim();if(!n)return;const c={id:uid(),name:n,email:'',taxId:''};S.clients.push(c);V.inv.cid=c.id;save();render()}
+function commit(){const i=V.inv,k=S.invoices.findIndex(x=>x.id==i.id);delete i.isNew;i.snap=S.taxes.filter(t=>(i.tax||[]).includes(t.id)).map(t=>({id:t.id,name:t.name,rate:t.rate}));if(k<0){S.invoices.push(i);S.seq++}else S.invoices[k]=i;save()}
+function sv(){if(!V.inv.cid)return alert('Choose a client first.');commit();go('list');toast('Invoice saved')}
+function back(){const i=V.inv;if(V.v=='edit'&&i&&i.cid&&i.items.some(it=>it.d||+it.p))commit();go('list')}
+function del(){if(!V.del){V.del=true;render();return}S.invoices=S.invoices.filter(x=>x.id!=V.inv.id);save();go('list');toast('Invoice deleted')}
+function clients(){let h=hdr('Clients',"go('list')")+`<div class="pg"><div class="sl" style="margin-top:8px">Add a client</div><div class="card"><input id="cn" placeholder="Company or client name"><div class="r" style="margin-top:8px"><input id="ce" type="email" placeholder="Email (optional)"><input id="ct" placeholder="Tax ID (optional)"></div><button class="p w" style="margin-top:12px" onclick="addc()">Add client</button></div>`;
+if(!S.clients.length)h+=`<div class="mu" style="text-align:center;margin:24px">No clients yet.</div>`;
+for(const c of S.clients){const inv=S.invoices.filter(i=>i.cid==c.id),owed=r2(inv.reduce((a,i)=>a+Math.max(0,calc(i,S.taxes).bal),0));h+=`<div class="card inv" style="cursor:default"><div class="av">${esc(c.name.trim().charAt(0).toUpperCase()||'?')}</div><div class="gr"><b>${esc(c.name)}</b><div class="mu">${esc([c.email,c.taxId&&'Tax ID '+c.taxId].filter(Boolean).join(' · ')||inv.length+' invoice(s)')}</div></div><div class="amt"><span class="chip ${owed>0?'bad':'ok'}">${owed>0?'Owes '+money(owed):'Settled'}</span>${inv.length?'':`<div><button class="d sm" onclick="delc('${c.id}')">Delete</button></div>`}</div></div>`}
+return h+`</div>`}
+function addc(){const n=$('#cn').value.trim();if(!n)return alert('Enter a client name.');S.clients.push({id:uid(),name:n,email:$('#ce').value.trim(),taxId:$('#ct').value.trim()});save();render()}
+function delc(id){S.clients=S.clients.filter(x=>x.id!=id);save();render()}
+function setSeq(v){const n=Math.floor(+v),m=maxNo();if(!(n>=1))return alert('Enter a number, 1 or higher.'),render();if(n<=m)return alert('Your last invoice is '+fmtNo(m)+'. Enter a higher number.'),render();S.seq=n;save();render()}
+const themeBtn=()=>{const t=S.theme||'auto';return `<button class="ib" aria-label="Appearance: ${t}" onclick="cycleTheme()">${svg(t=='light'?ic.sun:t=='dark'?ic.moon:ic.auto)}</button>`};
+function cycleTheme(){const o=['auto','light','dark'],n=o[(o.indexOf(S.theme||'auto')+1)%3];setTheme(n);toast(n=='auto'?'Appearance: Auto':n=='light'?'Light mode':'Dark mode')}
+function setTheme(v){S.theme=v;save();applyTheme();render()}
+function tx(v){S.taxOn=v;if(!v)S.taxes=[];save();render()}
+
+function settings(){const b=S.biz,on=S.taxOn||S.taxes.length>0,lock=S.invoices.length>0,isPro=localStorage.getItem("is_pro")==="true";
+let h=hdr('Settings',"go('list')")+`<div class="pg"><div class="sl" style="margin-top:8px">Your details</div><div class="card"><div class="lrow"><label class="lbox">${b.logo?`<img src="${b.logo.d}" alt="Logo">`:`${svg(ic.plus)}<span>Logo</span>`}<input type="file" accept="image/png,image/jpeg" onchange="setLogo(this)" hidden></label><div style="flex:1;min-width:0"><label style="margin-top:0">Company name, or your own name if you work alone</label><input value="${esc(b.name)}" onchange="S.biz.name=this.value;save()"></div></div><div class="mu" style="margin:8px 0 0">Logo is optional. PNG or JPG, any size (we resize it). ${b.logo?'<button class="d sm" style="padding:0 4px" onclick="rmLogo()">Remove logo</button>':''}</div><label>Address</label><textarea onchange="S.biz.addr=this.value;save()">${esc(b.addr)}</textarea><div class="r" style="margin-top:12px"><div><label>Email</label><input type="email" value="${esc(b.email)}" onchange="S.biz.email=this.value.trim();save()"></div><div><label>Phone</label><input type="tel" value="${esc(b.phone)}" onchange="S.biz.phone=this.value.trim();save()"></div></div><label>Tax ID number (optional)</label><input placeholder="e.g. your VAT, GST or NTN number" value="${esc(b.taxId)}" onchange="S.biz.taxId=this.value;save()"></div>
+<div class="sl">Currency</div><div class="card"><select ${lock?'disabled':''} onchange="S.biz.cur=this.value;save();render()">${[...new Set([b.cur,...CUR])].map(c=>`<option ${c==b.cur?'selected':''}>${c}</option>`).join('')}</select><div class="mu" style="margin-top:6px">${lock?'Locked after your first invoice, so old invoices never change. Delete all invoices to change it.':'Used for all amounts on your invoices.'}</div></div>
+<div class="sl">Invoice numbering</div><div class="card"><label>Next invoice number</label><input type="number" inputmode="numeric" min="1" value="${S.seq}" onchange="setSeq(this.value)"><div class="mu" style="margin-top:6px">Next invoice: ${fmtNo(S.seq)}. Numbers are automatic. Change this only if you already issued invoices elsewhere.</div></div>
+<div class="sl">Taxes</div><div class="card"><label class="ck"><input type="checkbox" ${on?'checked':''} onchange="tx(this.checked)"><span><b>I charge tax on my invoices</b> <span class="mu">(optional)</span></span></label>`;
+if(on){h+=`<div class="mu" style="margin:8px 0">Add the tax you charge, for example VAT or GST.</div>`;S.taxes.forEach((t,n)=>{h+=`<div class="row"><span>${esc(t.name)} ${t.rate}%</span><button class="d sm" onclick="S.taxes.splice(${n},1);save();render()">Remove</button></div>`});h+=`<div class="r" style="margin-top:8px"><input id="tn" placeholder="Name (VAT, GST…)"><input id="tr" type="number" inputmode="decimal" step="any" placeholder="Rate %"><button class="p" onclick="addt()">Add</button></div>`}
+h+=`</div><div class="sl">Pro Version</div><div class="card"><div class="mu">${isPro?'<b>Pro Status: Active</b><br>Thank you for supporting us! PDF watermark is permanently removed.':'Free version includes a footer watermark on generated PDFs. Upgrade to remove it for a one-time payment.'}</div>${isPro?'':`<div style="margin-top:12px"><button class="p w" onclick="buyPro()">Upgrade to Pro ($19)</button></div>`}</div><div class="sl">Backup</div><div class="card"><div class="mu">Save a backup file now and then (send it to WhatsApp, Drive or email). On a new phone, open that file here to get everything back.</div><div class="r" style="margin-top:10px"><button class="p" onclick="bk()">Save backup file</button><label class="sec" style="cursor:pointer;margin:0;padding:13px 16px;border:1.5px solid var(--bd);border-radius:14px;text-align:center;font-size:15px;font-weight:650;color:var(--tx)">Restore from file<input type="file" accept=".json,application/json" onchange="rf(this)" hidden></label></div></div></div>`;return h}
+
+function setLogo(el){const f=el.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const m=240,k=Math.min(1,m/Math.max(im.width,im.height)),w=Math.max(1,Math.round(im.width*k)),h=Math.max(1,Math.round(im.height*k)),c=document.createElement('canvas');c.width=w;c.height=h;const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,w,h);x.drawImage(im,0,0,w,h);S.biz.logo={d:c.toDataURL('image/jpeg',.88),w,h};save();render()};im.onerror=()=>alert('That file is not a usable image.');im.src=r.result};r.readAsDataURL(f)}
+function rmLogo(){delete S.biz.logo;save();render()}
+function addt(){const n=$('#tn').value.trim(),r=+$('#tr').value;if(!n||!(r>=0))return alert('Enter a name and a rate.');S.taxes.push({id:uid(),name:n,rate:r,def:true});save();render()}
+function mkpdf(pages){const img=pages.img,o=[],n=pages.length,im=5+2*n;o[1]='<</Type/Catalog/Pages 2 0 R>>';o[2]='<</Type/Pages/Kids['+pages.map((_,i)=>(5+i*2)+' 0 R').join(' ')+']/Count '+n+'>>';
+o[3]='<</Type/Font/Subtype/Type1/BaseFont/Helvetica/Encoding/WinAnsiEncoding>>';o[4]='<</Type/Font/Subtype/Type1/BaseFont/Helvetica-Bold/Encoding/WinAnsiEncoding>>';
+pages.forEach((ops,i)=>{const t=ops.join('\n');o[5+i*2]='<</Type/Page/Parent 2 0 R/MediaBox[0 0 595 842]/Resources<</Font<</F1 3 0 R/F2 4 0 R>>'+(img&&i==0?'/XObject<</Im1 '+im+' 0 R>>':'')+'>>/Contents '+(6+i*2)+' 0 R>>';o[6+i*2]='<</Length '+t.length+'>>\nstream\n'+t+'\nendstream'});
+if(img)o[im]='<</Type/XObject/Subtype/Image/Width '+img.w+'/Height '+img.h+'/ColorSpace/DeviceRGB/BitsPerComponent 8/Filter/DCTDecode/Length '+img.j.length+'>>\nstream\n'+img.j+'\nendstream';
+let out='%PDF-1.4\n';const off=[];for(let k=1;k<o.length;k++){off[k]=out.length;out+=k+' 0 obj\n'+o[k]+'\nendobj\n'}
+const x=out.length;return out+'xref\n0 '+o.length+'\n0000000000 65535 f \n'+off.slice(1).map(v=>String(v).padStart(10,'0')+' 00000 n \n').join('')+'trailer\n<</Size '+o.length+'/Root 1 0 R>>\nstartxref\n'+x+'\n%%EOF'}
+const u8=s=>Uint8Array.from(s,c=>c.charCodeAt(0));
+const isN=()=>{try{return !!(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform())}catch(e){return false}};
+async function nat(no,L,share){try{const F=Capacitor.Plugins.Filesystem,Sh=Capacitor.Plugins.Share,fn=String(no).replace(/[^\w-]/g,'_')+'.pdf',r=await F.writeFile({path:fn,data:btoa(mkpdf(L)),directory:'CACHE'});await Sh.share({title:String(no),files:[r.uri],dialogTitle:share?'Send invoice':'Save or send PDF'})}catch(e){const t=String(e&&e.message||e);if(!/cancel/i.test(t))alert('Could not create the PDF: '+t)}}
+
+function plines(){const i=V.inv,b=S.biz,cl=S.clients.find(x=>x.id==i.cid)||{},c=calc(i,S.taxes),cur=b.cur||'USD';
+const W=[278,278,355,556,556,889,667,191,333,333,389,584,278,333,278,278,556,556,556,556,556,556,556,556,556,556,278,278,584,584,584,556,1015,667,667,722,722,667,611,778,722,278,500,667,556,833,722,778,667,778,722,667,611,722,667,944,667,667,611,278,278,278,469,556,333,556,556,500,556,556,278,556,556,222,222,500,222,833,556,556,556,556,333,500,278,556,500,722,500,500,500,334,260,334,584];
+const IN=[.31,.27,.9],DK=[.06,.1,.2],GR=[.42,.47,.58],LT=[.95,.96,.98],GN=[.07,.5,.36],OR=[.85,.28,.06],WH=[1,1,1];
+const tw=(t,z)=>{let w=0;for(const ch of String(t)){const k=ch.charCodeAt(0);w+=k>=32&&k<127?W[k-32]:556}return w*z/1000};
+const ex=t=>String(t).replace(/\u20ac/g,'\x80').replace(/[\u2212\u2013\u2014]/g,'-').replace(/[\u2018\u2019]/g,"'").replace(/[\u201c\u201d]/g,'"').replace(/[^\x20-\x7e\x80\xa0-\xff]/g,'?').replace(/[\\()]/g,m=>'\\'+m).replace(/[\x80-\xff]/g,m=>'\\'+m.charCodeAt(0).toString(8));
+const T=(x,y,t,z,f,col,r)=>{t=String(t);const w=r?tw(t,z)*(f==2?1.04:1):0;return `BT /F${f} ${z} Tf ${col.join(' ')} rg ${(x-w).toFixed(1)} ${y.toFixed(1)} Td (${ex(t)}) Tj ET`};
+const R=(x,y,w,h,k)=>`${k.join(' ')} rg ${x} ${y} ${w} ${h} re f`,L=(x1,y1,x2,y2)=>`0.9 0.91 0.94 RG 0.7 w ${x1} ${y1} m ${x2} ${y2} l S`;
+const f=n=>(+n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+const wrap=(t,w,z)=>{const out=[];String(t).split('\n').forEach(p=>{let l='';for(const wd of p.split(' ')){const u=l?l+' '+wd:wd;if(tw(u,z)>w&&l){out.push(l);l=wd}else l=u}out.push(l)});return out};
+const HD=i.items.some(it=>+it.disc>0);
+const th=y=>[R(40,y-8,515,22,LT),T(48,y,'DESCRIPTION',8,2,GR),T(330,y,'QTY',8,2,GR,1),T(420,y,'PRICE',8,2,GR,1),HD?T(480,y,'DISCOUNT',8,2,GR,1):'',T(555,y,'AMOUNT ('+cur+')',8,2,GR,1)];
+const P=[];let ops;const pg=()=>{ops=[];P.push(ops)};pg();
+const LG=b.logo&&b.logo.d&&b.logo.w>0&&b.logo.h>0?b.logo:null,LX=LG?116:40;if(LG){P.img={w:LG.w,h:LG.h,j:atob(LG.d.split(',')[1])}}
+ops.push(R(0,734,595,108,IN),T(LX,800,b.name||'Your business',20,2,WH),T(555,800,'INVOICE',26,2,WH,1),T(555,778,i.no,11,1,WH,1));
+let ay=782;[...(b.addr||'').split('\n').slice(0,2),[b.email,b.phone].filter(Boolean).join('   |   ')].filter(Boolean).forEach(l=>{ops.push(T(LX,ay,l,9,1,WH));ay-=12});if(b.taxId)ops.push(T(LX,ay,'Tax ID: '+b.taxId,9,1,WH));
+if(LG){const k=Math.min(56/LG.w,56/LG.h),iw=LG.w*k,ih=LG.h*k;ops.push(R(40,766,64,64,WH),`q ${iw.toFixed(2)} 0 0 ${ih.toFixed(2)} ${(40+(64-iw)/2).toFixed(2)} ${(766+(64-ih)/2).toFixed(2)} cm /Im1 Do Q`)}
+ops.push(T(40,712,'BILL TO',8,2,GR),T(40,696,cl.name||'-',13,2,DK));if(cl.taxId)ops.push(T(40,682,'Tax ID: '+cl.taxId,9,1,GR));
+ops.push(T(555,712,'ISSUED',8,2,GR,1),T(555,698,i.date,10,1,DK,1));if(i.due)ops.push(T(470,712,'DUE',8,2,GR,1),T(470,698,i.due,10,1,DK,1));
+ops.push(...th(654));let y=628;
+for(const it of i.items){const base=r2((+it.q||0)*(+it.p||0)),dsc=it.dt==='%'?base*(+it.disc||0)/100:(+it.disc||0),amt=r2(Math.max(0,base-dsc)),ls=wrap(it.d||'-',230,10),h=ls.length*13+12;
+if(y-h<110){pg();ops.push(...th(800));y=774}
+ls.forEach((l,k)=>ops.push(T(48,y-k*13,l,10,1,DK)));
+ops.push(T(330,y,+it.q||0,10,1,DK,1),T(420,y,f(+it.p||0),10,1,DK,1),HD?T(480,y,it.disc?(it.dt==='%'?it.disc+'%':f(it.disc)):'-',10,1,GR,1):'',T(555,y,f(amt),10,2,DK,1),L(40,y-h+9,555,y-h+9));y-=h}
+const tl=(c.lines.length||c.disc>0||c.wh)?trows(c,i):[];
+if(y-(tl.length*16+110)<40){pg();y=790}
+y-=8;tl.forEach(([k,v])=>{ops.push(T(360,y,k,10,1,GR),T(555,y,(v<0?'-':'')+f(Math.abs(v)),10,1,DK,1));y-=16});
+y-=10;ops.push(R(350,y-8,205,26,IN),T(360,y,'TOTAL '+cur,10,2,WH),T(548,y,f(c.pay),12,2,WH,1));y-=26;
+const pv2=i.pbOn?plist(i):[],ps=i.pbOn?pAmt(i):0;
+if(ps>0||c.paid>0){if(y-((Math.min(pv2.length,6)+5)*16+30)<40){pg();y=790}
+y-=8;ops.push(T(360,y,'ACCOUNT SUMMARY',8,2,GR));y-=16;
+pv2.slice(0,6).forEach(q=>{ops.push(T(360,y,'Previous '+q[0].no,10,1,GR),T(555,y,f(q[1]),10,1,DK,1));y-=15});
+if(pv2.length>6){ops.push(T(360,y,'+ '+(pv2.length-6)+' more earlier invoices',9,1,GR));y-=15}
+if(ps>0){ops.push(T(360,y,'Previous balance',10,2,DK),T(555,y,f(ps),10,2,DK,1));y-=16}
+ops.push(T(360,y,'This invoice',10,1,GR),T(555,y,f(c.pay),10,1,DK,1));y-=16;
+if(c.paid>0){ops.push(T(360,y,'Paid on this invoice',10,1,GR),T(555,y,'-'+f(c.paid),10,1,DK,1));y-=16}
+const due=r2(ps+c.bal),pd=due<=0;y-=6;ops.push(R(350,y-8,205,26,pd?GN:OR),T(360,y,pd?'PAID IN FULL':(ps>0?'TOTAL AMOUNT DUE':'BALANCE DUE'),10,2,WH),T(548,y,f(due),12,2,WH,1));y-=40}else y-=30;
+if(i.notes){const nl=wrap(i.notes,515,10).slice(0,14);if(y-nl.length*13<40){pg();y=790}ops.push(T(40,y,'NOTES',8,2,GR));y-=15;nl.forEach(l=>{ops.push(T(40,y,l,10,1,DK));y-=13})}
+
+// Watermark logic for free tier users
+if (localStorage.getItem("is_pro") !== "true") {
+    ops.push(T(40, 30, "Generated for free with InstantInvoice.com - Upgrade to remove watermark", 8, 1, GR));
+}
+
+return P}
+
+async function pdf(){const L=plines(),i=V.inv;if(isN())return nat(i.no,L,true);try{const d=await claude.use('downloads');if(!d)throw 0;await d.save({filename:i.no+'.pdf',data:new Blob([u8(mkpdf(L))],{type:'application/pdf'})})}catch(e){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([u8(mkpdf(L))],{type:'application/pdf'}));a.download=i.no+'.pdf';a.click()}}
+function rf(el){const f=el.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const o=JSON.parse(r.result);if(!o.invoices||!o.clients)throw 0;if(!confirm('Replace all current data with this backup?'))return;S=Object.assign(S,o);save();go('list')}catch(e){alert('That file is not a valid backup.')}};r.readAsText(f)}
+async function bk(){const t=JSON.stringify(S),fn='invoice-backup-'+today()+'.json';
+if(isN()){try{const r=await Capacitor.Plugins.Filesystem.writeFile({path:fn,data:t,directory:'CACHE',encoding:'utf8'});await Capacitor.Plugins.Share.share({title:fn,files:[r.uri],dialogTitle:'Save your backup'})}catch(e){if(!/cancel/i.test(String(e&&e.message||e)))alert('Backup failed: '+(e&&e.message||e))}return}
+try{const d=await claude.use('downloads');if(d){await d.save({filename:fn,data:t});return}}catch(e){}
+const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([t],{type:'application/json'}));a.download=fn;a.click()}
+
+// Lemon Squeezy integration & Pro mode handler
+function buyPro() {
+    if (window.LemonSqueezy) {
+        LemonSqueezy.Url.Open('YOUR_LEMON_SQUEEZY_URL_HERE');
+    } else {
+        alert("Payment gateway loading... please try again in a moment.");
+    }
+}
+
+// Auto-activate Pro mode when client returns after paying
+if (new URLSearchParams(window.location.search).get("payment") === "success") {
+    localStorage.setItem("is_pro", "true");
+    alert("Thank you! Watermark is now permanently removed.");
+    window.history.replaceState({}, document.title, window.location.pathname);
+    render();
+}
+
+render();
+try{const A=window.Capacitor&&Capacitor.Plugins&&Capacitor.Plugins.App;if(A&&A.addListener)A.addListener('backButton',()=>{if(V.v!='list')back();else A.exitApp()})}catch(e){}
+</script></body></html>
